@@ -11,7 +11,9 @@ import rootSaga from './sagas';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // axios.defaults.withCredentials = true;
-axios.defaults.baseURL = "http://rem-rest-api.herokuapp.com/api/users";
+axios.defaults.baseURL = "http://rem-rest-api.herokuapp.com/api/";
+
+// axios.defaults.baseURL = "https://reqres.in/api/";
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(reducers, applyMiddleware(sagaMiddleware));

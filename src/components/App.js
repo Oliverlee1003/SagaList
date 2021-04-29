@@ -1,8 +1,10 @@
 import React, {Component} from "react";
 import {connect} from 'react-redux';
-import {getUsersRequest} from "../actions/users";
+import {getUsersRequest, createUserRequest, deleteUserRequest, usersError} from "../actions/users";
 import UserList from './UsersList';
 import NewUserForm from './NewUserForm';
+import {Alert} from 'reactstrap';
+
 
 function* testing() {
     console.log("before 1");
@@ -19,7 +21,17 @@ class App extends Component {
     }
 
     handleSubmit = ({firstName, lastName}) => {
-        console.log(firstName, lastName);
+        this.props.createUserRequest({firstName, lastName});
+    };
+
+    handleDeleteUserClick = (userId) => {
+        this.props.deleteUserRequest(userId);
+    };
+
+    handleCloseAlert = () => {
+        this.props.usersError({
+            error: ''
+        });
     };
 
     render() {
@@ -28,13 +40,19 @@ class App extends Component {
         console.log(iterator.next());
         return (
             <div style={{margin: '0 auto', padding: '20px', maxWidth: '600px'}}>
+                <Alert color="danger" isOpen={!!this.props.users.error} toggle={this.handleCloseAlert}>
+                    {this.props.users.error};
+                </Alert>
                 <NewUserForm onSubmit = {this.handleSubmit}/>
-                <UserList users = {users.items}/>
+                <UserList users = {users.items} onDeleteUser={this.handleDeleteUserClick}/>
             </div>
         );
     }
 }
 
 export default connect(({users}) => ({users}), {
-    getUsersRequest
+    deleteUserRequest,
+    getUsersRequest,
+    createUserRequest,
+    usersError
 })(App);
